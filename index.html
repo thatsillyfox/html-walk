@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=0">
+    <title>Sharing is caring 爱💗分享</title>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/myAnimation.js"></script>
+    <script src="js/snowfall.jquery.js"></script>
+    <style type="text/css">
+        .person {
+            position: fixed;
+            display: none;
+            z-index: 3;
+        }
+
+        .imageDiv {
+            position: absolute;
+            height: 100%;
+            left: 0;
+            top: 0;
+        }
+
+        .lbl {
+            position: fixed;
+            width: auto;
+            z-index: 5;
+            color: white;
+            font-size: 150%;
+            display: none;
+        }
+    </style>
+</head>
+
+<body onorientationchange="changeOrientation(event);"
+      style="background-color: #1d3655;">
+<div style="display: none;">
+    <img src="images/back/share.jpg" />
+</div>
+<div class="sound">
+    <div class="sounds"></div>
+    <audio id="music" src="music/sample.mp3" loop="" autoplay="autoplay"></audio>
+</div>
+<!--<div id="link1" class="link" index="1" style="padding:0;margin: 0; position: absolute; width:200px; height: 5%; left:500px;top:18%; background-color:transparent;z-index:10;" onclick="goLink();"></div>-->
+
+<img id="hand"
+     style="position: absolute; right: 10px; top: 40%; width: auto; height: 40px; z-index: 10;">
+<!--<img id="startIMG" class="" src="images/back/start.gif" style="position: absolute; margin: 0px;bottom:0px;z-index: 10;" > -->
+
+<div id="lbl"
+     style="position: absolute; width: 100%; top: 150px; z-index: 10; color: white; font-size: 150%; left: 20%"></div>
+<div id="touchBox"
+     style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden;">
+    <div class="imageDiv" id="imageDiv1" style="z-index: 1;"></div>
+    <div class="imageDiv" id="imageDiv2" style="z-index: 2;"></div>
+    <div class="imageDiv" id="imageDiv3" style="z-index: 5;"></div>
+
+    <img id="person1" class="person" src="images/person/person-1.png">
+    <img id="person2" class="person" src="images/person/person-2.png">
+    <img id="person3" class="person" src="images/person/person-3.png">
+    <img id="person4" class="person" src="images/person/person-4.png">
+    <img id="person5" class="person" src="images/person/person-5.png">
+    <img id="person6" class="person" src="images/person/person-6.png">
+    <img id="person7" class="person" src="images/person/person-7.png">
+    <img id="person8" class="person" src="images/person/person-8.png">
+
+    <input id="test" style="position: absolute; bottom: 0; z-index: 10;"
+           type="hidden">
+</div>
+<div id="snowzone"></div>
+
+
+</body>
+<script>
+    var musicFlg = false;
+    function changeOrientation(event) {
+        document.body.className = "darkBg";
+        $('.collectonme').hide();
+        $(document).snowfall('clear');
+        $(document).snowfall({
+            round : true,
+            minSize : 1,
+            maxSize : 3,
+            flakeCount : 15,
+            maxSpeed : 1
+        }); // add rounded
+    }
+
+    function animatePerson(index, flg) {
+        $(".person").hide();
+        if (flg) {
+
+            $.fn.writeText = function(content) {
+                var contentArray = content.split(","), current = 0, elem = this;
+                setInterval(function() {
+                    if (current < contentArray.length) {
+                        elem.html(elem.html() + contentArray[current++]);
+                    }
+                    if (current == contentArray.length) {
+                        setTimeout(function() {
+                            goLink();
+                        }, 3000);
+                        current++;
+                    }
+                }, 200);
+
+            };
+            $("#lbl").writeText(" 行 ,走 ,&nbsp ,无 ,处 ,不 ,在,");
+
+            $("#person2").show();
+            $("#person2").fadeOut(3000);
+            setTimeout(
+                    function() {
+                        window.location.href = "http://www.kpictures.cn/powertogo/download/";
+                    }, 3000);
+        } else
+            $("#person" + index).show();
+    }
+    function animateLbl(index) {
+        $(".lbl").each(function() {
+            var lblindex = $(this).attr("index");
+            if (lblindex <= index)
+                $(this).show();
+            else
+                $(this).hide();
+        });
+    }
+    function flicker(count, callback, current) {
+        current = current || 0;
+        $("#person11")[current % 2 == 0 ? 'hide' : 'show']();
+        setTimeout(function() {
+            if (count * 2 <= current) {
+                callback();
+                return;
+            }
+            flicker(count, callback, current + 1)
+        }, 500);
+    }
+    function goLink() {
+        musicFlg = true;
+        //	window.location = "xiazai/index.html";//"http://www.kpictures.cn/sharingiscaring/download/";
+    }
+    $(function() {
+        document.body.className = "darkBg";
+        $('.collectonme').hide();
+        $(document).snowfall('clear');
+        $(document).snowfall({
+            round : true,
+            minSize : 1,
+            maxSize : 3,
+            flakeCount : 15,
+            maxSpeed : 1
+        }); // add rounded
+
+        var gesturableImg = new ImgTouchObject({
+            target : document.getElementById('touchBox'),
+            img1 : document.getElementById('imageDiv1'),
+            img2 : document.getElementById('imageDiv2'),
+            img3 : document.getElementById('imageDiv3')
+        });
+
+        var winWidth = $(window).width();
+        var winHeight = $(window).height();
+
+        var index = 1, imgWidth;
+        var imgDiv1 = document.getElementById("imageDiv1");
+        var imgDiv2 = document.getElementById("imageDiv2");
+        var imgDiv3 = document.getElementById("imageDiv3");
+        var pageConunt = 17;
+        for ( var i = 0; i < pageConunt; i++) {
+            //setTimeout(function() {
+            for ( var j = 1; j < 4; j++) {
+                //if(j==2) continue;
+                var img = document.createElement("img");
+                if ((index == 6 && j == 2) || (index == 8 && j == 2)) {
+                    img.src = "images/back/" + index + "-" + j + ".gif";
+                } else {
+                    img.src = "images/back/" + index + "-" + j + ".png";
+                }
+
+                $(img).css({
+                    //width: winWidth + "px",
+                    height : winHeight + "px",
+                    float : "left"
+                });
+                if (j == 1)
+                    imgDiv1.appendChild(img);
+                else if (j == 2)
+                    imgDiv2.appendChild(img);
+                else if (j == 3)
+                    imgDiv3.appendChild(img);
+            }
+            index++;
+            //}, index*500);
+        }
+        var allWidth = (640 * pageConunt + 342);
+        var oneHeight = 1136;
+        var iw = ((allWidth * winHeight) / oneHeight);
+        //var iw = winWidth*15;
+        $(imgDiv1).width(iw + "px");
+        $(imgDiv2).width(iw + "px");
+        $(imgDiv3).width(iw + "px");
+
+        for ( var i = 1; i < 9; i++) {
+            $("#person" + i).css("left", winWidth * 0.2);
+            $("#person" + i).css("top", winHeight * (1 - 0.4));
+            $("#person" + i).css("height", winHeight * 0.4);
+        }
+        $("#person1").show();
+        var tmp = 0.2;
+        var lblid = 1;
+        $(".lbl").each(function() {
+            $(this).css("top", winHeight * 0.3 + "px");
+            $(this).css("left", winWidth * tmp + "px");
+            if (lblid == 2)
+                tmp += 0.15;
+            else
+                tmp += 0.1;
+            lblid++;
+        });
+        var resolution = (winHeight / 372);
+        /*        $("#startIMG").css("left",winWidth*0.087);
+         $("#startIMG").css("height",winHeight*0.44);
+         $("#startIMG").css("width",resolution*winWidth*0.45); *///startIMG
+        $("#lbl").css("top", winHeight * 0.3);
+        //$("#hand").attr("src", "images/back/hand.gif");
+    });
+</script>
+</html>
